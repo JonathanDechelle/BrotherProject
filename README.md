@@ -1,1 +1,3 @@
 # BrotherProject
+
+GameType : Defense 
