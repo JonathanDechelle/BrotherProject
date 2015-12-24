@@ -40,7 +40,7 @@ public class Wave : MonoBehaviour
         m_Enemy = enemyGo.GetComponent<Enemy>();
     }
 
-    public bool IsFinish()
+    public bool LaunchAnotherWave()
     {
         return m_WaveState == EWaveState.InProgress || m_WaveState == EWaveState.Completed;
     }

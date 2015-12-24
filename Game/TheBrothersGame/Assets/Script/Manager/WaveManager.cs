@@ -26,13 +26,15 @@ public static class WaveManager
         while (m_WavesToProcess.Count > 0)
         {
             GetCurrentWaveToProcess().StartCoolDown();
-            while (!GetCurrentWaveToProcess().IsFinish())
+            while (!GetCurrentWaveToProcess().LaunchAnotherWave())
             {
                 yield return null;
             }
 
             m_WavesToProcess.RemoveAt(0);
         }
+
+        m_State = EWaveManagerState.Finish;
     }
 
     private static Wave GetCurrentWaveToProcess()
