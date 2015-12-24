@@ -5,7 +5,6 @@ ProjectSettings/
 *.csproj
 *.sln
 *.userprefs
-*.meta
 *.cache
 Debug/
 *.suo
