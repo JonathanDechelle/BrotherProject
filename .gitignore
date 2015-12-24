@@ -1,0 +1,11 @@
+#ignore objects and archives, anywhere in the tree
+temp/
+Library/
+ProjectSettings/
+*.csproj
+*.sln
+*.userprefs
+*.meta
+*.cache
+Debug/
+*.suo
