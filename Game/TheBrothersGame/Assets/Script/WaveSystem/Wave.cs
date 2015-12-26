@@ -9,25 +9,30 @@ public enum EWaveState
     Completed = 3
 }
 
-public class Wave : MonoBehaviour 
+[System.Serializable]
+public class WaveInfo
 {
-    public float m_CoolDownBeforeAttack = 2f;
+    public float m_WaitTime = 2f;
+    public EEnemy m_EnemyType;
+    public int m_NumberOfEnemy;
+}
+
+public class Wave : MonoBehaviour
+{
+    private float m_WaitTime;
     private EWaveState m_WaveState;
     private EWaveState m_DebugWaveState = EWaveState.Completed;
-    private int m_IDWave;
+    private const string WAVE_FORMAT = "Wave State = {0}";
     private Enemy m_Enemy;
 
-    private const string WAVE_FORMAT = "Wave {0} State = {1}";
-
-    public Wave(float aCoolDownBeforeAttack, int aIDWave)
+    public Wave(WaveInfo aWaveInfo)
     {
-        m_CoolDownBeforeAttack = aCoolDownBeforeAttack;
+        m_WaitTime = aWaveInfo.m_WaitTime;
         m_WaveState = EWaveState.Created;
-        m_IDWave = aIDWave;
         CoroutineManager.StartCoroutine(UpdateWave());
         CoroutineManager.StartCoroutine(UpdateDebugWave());
     }
-
+    
     public void StartCoolDown()
     {
         m_WaveState = EWaveState.WaitingToLaunch;
@@ -44,16 +49,16 @@ public class Wave : MonoBehaviour
     {
         return m_WaveState == EWaveState.InProgress || m_WaveState == EWaveState.Completed;
     }
-
+    
     private void DebugWave()
     {
         if(m_DebugWaveState != m_WaveState)
         {
             m_DebugWaveState = m_WaveState;
-            Debug.Log(string.Format(WAVE_FORMAT, m_IDWave, m_WaveState));
+            Debug.Log(string.Format(WAVE_FORMAT, m_WaveState));
         }
     }
-
+    
     private IEnumerator UpdateDebugWave()
     {
         while (true)
@@ -73,7 +78,7 @@ public class Wave : MonoBehaviour
         //Wait time before lunch
         while(m_WaveState == EWaveState.WaitingToLaunch)
         {
-            float timer = m_CoolDownBeforeAttack;
+            float timer = m_WaitTime;
             while(timer > 0)
             {
                 timer -= Time.deltaTime;

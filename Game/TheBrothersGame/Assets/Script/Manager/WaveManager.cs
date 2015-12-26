@@ -18,7 +18,15 @@ public static class WaveManager
     {
         m_State = EWaveManagerState.InProcess;
         CoroutineManager.StartCoroutine(UpdateWaveManager());
-        m_WavesToProcess = aLevelData.m_Waves;
+        GenerateWave(aLevelData.m_WavesInfo);
+    }
+
+    private static void GenerateWave(List<WaveInfo> aWavesInfo)
+    {
+        foreach (WaveInfo waveinfo in aWavesInfo)
+        {
+            m_WavesToProcess.Add(new Wave(waveinfo));
+        }
     }
 
     private static IEnumerator UpdateWaveManager()
