@@ -4,14 +4,14 @@ public class Character : MonoBehaviour
 {
     public float m_Speed;
     public Rigidbody m_RigidBody;
-    public bool Alive = true;
+    public bool IsDead = false;
 
     public void Update()
     {
         GotoTarget();
         if (transform.position.z < -40)
         {
-            Alive = false;
+            IsDead = true;
         }
     }
 

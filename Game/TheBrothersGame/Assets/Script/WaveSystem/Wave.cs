@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public enum EWaveState
 {
@@ -19,18 +20,32 @@ public class WaveInfo
 
 public class Wave : MonoBehaviour
 {
-    private float m_WaitTime;
+    private WaveInfo m_WaveInfo;
     private EWaveState m_WaveState;
     private EWaveState m_DebugWaveState = EWaveState.Completed;
     private const string WAVE_FORMAT = "Wave State = {0}";
-    private Enemy m_Enemy;
+    private List<Enemy> m_Enemies;
 
     public Wave(WaveInfo aWaveInfo)
     {
-        m_WaitTime = aWaveInfo.m_WaitTime;
+        m_WaveInfo = aWaveInfo;
         m_WaveState = EWaveState.Created;
         CoroutineManager.StartCoroutine(UpdateWave());
         CoroutineManager.StartCoroutine(UpdateDebugWave());
+    }
+
+    private void GenerateEnemies()
+    {
+        m_Enemies = new List<Enemy>();
+        for (int i = 0; i < m_WaveInfo.m_NumberOfEnemy; i++)
+        {
+            GameObject enemyGo = Instantiate(EnemyGenerator.GetEnemyGameObject(m_WaveInfo.m_EnemyType)) as GameObject;
+            Enemy newEnemy = enemyGo.GetComponent<Enemy>();
+            if (newEnemy != null)
+            {
+                m_Enemies.Add(newEnemy);
+            }
+        }
     }
     
     public void StartCoolDown()
@@ -41,8 +56,7 @@ public class Wave : MonoBehaviour
     public void StartCombat()
     {
         m_WaveState = EWaveState.InProgress;
-        GameObject enemyGo = Instantiate(Resources.Load("Prefab/Enemy")) as GameObject;
-        m_Enemy = enemyGo.GetComponent<Enemy>();
+        GenerateEnemies();
     }
 
     public bool LaunchAnotherWave()
@@ -78,7 +92,7 @@ public class Wave : MonoBehaviour
         //Wait time before lunch
         while(m_WaveState == EWaveState.WaitingToLaunch)
         {
-            float timer = m_WaitTime;
+            float timer = m_WaveInfo.m_WaitTime;
             while(timer > 0)
             {
                 timer -= Time.deltaTime;
@@ -88,14 +102,29 @@ public class Wave : MonoBehaviour
             StartCombat();
         }
 
-        while(m_WaveState == EWaveState.InProgress)
+        //Update wave during timeLife
+        while (m_WaveState == EWaveState.InProgress)
         {
             yield return null;
-            if (!m_Enemy.Alive) //Victory Condition
+
+            UpdateDeadEnnemies();
+
+            if (m_Enemies.Count == 0)
             {
-                Destroy(m_Enemy.gameObject);
                 m_WaveState = EWaveState.Completed;
                 CoroutineManager.StopCoroutine(UpdateDebugWave());
+            }
+        }
+    }
+
+    private void UpdateDeadEnnemies()
+    {
+        for (int i = 0; i < m_Enemies.Count; i++)
+        {
+            if (m_Enemies[i].IsDead)
+            {
+                Destroy(m_Enemies[i].gameObject);
+                m_Enemies.RemoveAt(i);
             }
         }
     }
