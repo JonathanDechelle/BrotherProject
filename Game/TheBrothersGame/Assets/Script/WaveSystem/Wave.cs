@@ -26,6 +26,8 @@ public class Wave : MonoBehaviour
     private const string WAVE_FORMAT = "Wave State = {0}";
     private List<Enemy> m_Enemies;
 
+    private float SpawnRange = 5f;
+
     public Wave(WaveInfo aWaveInfo)
     {
         m_WaveInfo = aWaveInfo;
@@ -37,9 +39,19 @@ public class Wave : MonoBehaviour
     private void GenerateEnemies()
     {
         m_Enemies = new List<Enemy>();
+        
+        float angle = 0f;
+        float gap = 360.0f / m_WaveInfo.m_NumberOfEnemy;
+
         for (int i = 0; i < m_WaveInfo.m_NumberOfEnemy; i++)
         {
             GameObject enemyGo = Instantiate(EnemyGenerator.GetEnemyGameObject(m_WaveInfo.m_EnemyType)) as GameObject;
+            enemyGo.transform.position =
+               new Vector3(
+                   Mathf.Cos(gap * (i + 1)),
+                   0,
+                   Mathf.Sin(gap * (i + 1))) * SpawnRange;
+
             Enemy newEnemy = enemyGo.GetComponent<Enemy>();
             if (newEnemy != null)
             {
