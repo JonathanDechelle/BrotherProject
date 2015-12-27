@@ -26,12 +26,16 @@ public class Wave : MonoBehaviour
     private const string WAVE_FORMAT = "Wave State = {0}";
     private List<Enemy> m_Enemies;
 
-    private float SpawnRange = 5f;
+    private EnemySpawnPoint m_SpawnPoint;
+    private float m_SpawnRange = 10f;
+    private EnemyGoal m_Goal;
 
-    public Wave(WaveInfo aWaveInfo)
+    public Wave(WaveInfo aWaveInfo, EnemyGoal aGoal, EnemySpawnPoint aSpawnPoint)
     {
         m_WaveInfo = aWaveInfo;
         m_WaveState = EWaveState.Created;
+        m_Goal = aGoal;
+        m_SpawnPoint = aSpawnPoint;
         CoroutineManager.StartCoroutine(UpdateWave());
         CoroutineManager.StartCoroutine(UpdateDebugWave());
     }
@@ -40,24 +44,30 @@ public class Wave : MonoBehaviour
     {
         m_Enemies = new List<Enemy>();
         
-        float angle = 0f;
-        float gap = 360.0f / m_WaveInfo.m_NumberOfEnemy;
-
         for (int i = 0; i < m_WaveInfo.m_NumberOfEnemy; i++)
         {
             GameObject enemyGo = Instantiate(EnemyGenerator.GetEnemyGameObject(m_WaveInfo.m_EnemyType)) as GameObject;
-            enemyGo.transform.position =
-               new Vector3(
-                   Mathf.Cos(gap * (i + 1)),
-                   0,
-                   Mathf.Sin(gap * (i + 1))) * SpawnRange;
+            enemyGo.transform.position = GetSpawnPosition(i);
 
             Enemy newEnemy = enemyGo.GetComponent<Enemy>();
             if (newEnemy != null)
             {
+                newEnemy.m_Target = m_Goal.transform.position;
                 m_Enemies.Add(newEnemy);
             }
         }
+    }
+
+    public Vector3 GetSpawnPosition(int aUnitNumber)
+    {
+        float gap = 6.28319f / m_WaveInfo.m_NumberOfEnemy;
+        Vector3 newPosition = 
+                              new Vector3(
+                                            Mathf.Cos(gap * (aUnitNumber + 1)),
+                                            0,
+                                            Mathf.Sin(gap * (aUnitNumber + 1))) * m_SpawnRange;
+
+        return newPosition + m_SpawnPoint.transform.position;
     }
     
     public void StartCoolDown()
