@@ -10,14 +10,14 @@ public class CameraBehaviour : MonoBehaviour
     private float m_WaitTimeOnEnemyBase = 4.0f;
     private float m_WaitTimeCouter = 0f;
     private float m_CameraSpeed = 1.5f;
-    private const float MINIMUM_DISTANCE_TO_RETURN = 32.5f;
+    private const float MINIMUM_DISTANCE_TO_RETURN = 43f;
     private const float OFFSET_INTRO_CAMERA = 12f;
     private bool m_ReturnToBase = false;
     private bool m_CameraIntroSequence = true;
 
     public void Start()
     {
-        m_InitialPosition = m_LevelData.m_EnemyGoal.transform.position;
+        m_InitialPosition = m_LevelData.m_EnemyGoals[0].transform.position;
         m_InitialPosition.z += OFFSET_INTRO_CAMERA;
         CoroutineManager.StartCoroutine(UpdateCameraIntroTravelling());
     }

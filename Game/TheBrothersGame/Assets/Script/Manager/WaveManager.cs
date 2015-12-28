@@ -25,7 +25,7 @@ public static class WaveManager
     {
         foreach (WaveInfo waveinfo in aLevelData.m_WavesInfo)
         {
-            Wave newWave = new Wave(waveinfo, aLevelData.m_EnemyGoal, aLevelData.m_EnemySpawnPoint);
+            Wave newWave = new Wave(waveinfo, aLevelData.m_EnemyGoals, aLevelData.m_EnemySpawnPoint);
             m_WavesToProcess.Add(newWave);
         }
     }

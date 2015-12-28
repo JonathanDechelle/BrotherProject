@@ -27,13 +27,13 @@ public class Wave : MonoBehaviour
     private List<Enemy> m_Enemies;
 
     private EnemySpawnPoint m_SpawnPoint;
-    private EnemyGoal m_Goal;
+    private List<EnemyGoal> m_Goals;
 
-    public Wave(WaveInfo aWaveInfo, EnemyGoal aGoal, EnemySpawnPoint aSpawnPoint)
+    public Wave(WaveInfo aWaveInfo, List<EnemyGoal> aGoals, EnemySpawnPoint aSpawnPoint)
     {
         m_WaveInfo = aWaveInfo;
         m_WaveState = EWaveState.Created;
-        m_Goal = aGoal;
+        m_Goals = aGoals;
         m_SpawnPoint = aSpawnPoint;
         CoroutineManager.StartCoroutine(UpdateWave());
         CoroutineManager.StartCoroutine(UpdateDebugWave());
@@ -58,9 +58,31 @@ public class Wave : MonoBehaviour
         List<Enemy> newEnnemis = new List<Enemy>();
         if (newEnemy != null)
         {
-            newEnemy.m_Target = m_Goal.transform.position;
+            newEnemy.m_Target = GetClosestGoal(newEnemy).transform.position;
             m_Enemies.Add(newEnemy);
         }
+    }
+
+    private EnemyGoal GetClosestGoal(Enemy aCurrentEnemy)
+    {
+        if (m_Goals.Count == 0)
+        {
+            return null;
+        }
+
+        float distanceMinimum = float.MaxValue;
+        int indexClosest = 0;
+        for (int i = 0; i < m_Goals.Count; i++)
+        {
+            float distance = Vector3.Distance(aCurrentEnemy.transform.position, m_Goals[i].transform.position);
+            if (distance < distanceMinimum)
+            {
+                distanceMinimum = distance;
+                indexClosest = i;
+            }
+        }
+
+        return m_Goals[indexClosest];
     }
 
     public bool LaunchAnotherWave()
