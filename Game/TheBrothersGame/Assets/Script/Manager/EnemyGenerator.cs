@@ -11,7 +11,7 @@ public class EnemyGenerator : MonoBehaviour
 
     public void InitializeEnemyList()
     {
-        GameObject fakeEnemyMapperGO = Instantiate(Resources.Load("Prefab/EnemyMapper")) as GameObject;
+        GameObject fakeEnemyMapperGO = Instantiate(Resources.Load("Prefab/Mappers/EnemyMapper")) as GameObject;
         EnemyGenerator.m_FakeEnemyMapper = fakeEnemyMapperGO.GetComponent<FakeEnemyMapper>();
         Destroy(fakeEnemyMapperGO);
     }
