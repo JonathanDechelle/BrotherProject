@@ -1,19 +1,19 @@
 
-Le jeu est principalement un jeu de défense (Ja)-De gestion serai parfait, il regroupera beaucoup plus la rejouabiliter), vous incarnerez le chef dune tribue d'homme des cavernes 
+Le jeu est principalement un jeu de gestion, vous incarnerez le chef dune tribue d'homme des cavernes 
 et aiderez vos hommes à se défendre contre les hordes de dinosaures et autres èspeces qui cherche votre mort.
 
 Vous devrez élaborer des stratégies autant offensive que defensive pour vous permettre une victoire assurée.
 
-TECHNIQUES OFFENSIVES (à voir ak Ja)
+TECHNIQUES OFFENSIVES
 
-(Ja)-Piege, trappes, tourelle assiste,ect
-Evidamment il aura des object consomable pour les offensive et defensive comme les hommes , armes, main doeuvre ,reparation ,ect
+Des Piege, trappes, tourelle assistees pourront etre posees sur le terrain.
+Evidamment, il aura des objets qui auront une duree de vie comme les hommes , armes, main doeuvre , reparation (pour les offensive et defensive)
 
+TECHNIQUES DÉFENSIVES
 
-TECHNIQUES DÉFENSIVES (à voir ak Ja)
-
-(Ja)-Pricipalement le gameplay se base sur une approche de defense, mur, tourelle,poste de garde,ect..
-Mais si lon ajoute le second gameplay il aura alor gameplay de 3em personne que donnera acces au joueur de jouer le chef de tribus (surmant special a toi de voir si lidee est bonne) 
+Pricipalement le gameplay se base sur une approche de defense, mur, tourelle, poste de garde
+Mais si lon ajoute le second gameplay il aura alors un gameplay de 3em personne qui donnera acces au joueur la possibilite d<incarner 
+un chef de tribus (va etre integrer lorsque tout le systeme sera autonomne) 
 
 Il y aura aussi un système de Wave : 
 Une ou plusieurs hordes de sauvages ennemies tenteront de détruire votre base et ce dans un temps régulier.

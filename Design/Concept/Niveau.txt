@@ -5,11 +5,14 @@ Une caméra pourra être controllé par le joueur pour voir sa base et ce en tout t
 Pendant ce temps son armée peut intéragir avec son environnement ,
 donc cela veut dire qu'il ny a pas besoin d'avoir de focus de la caméra pour que l'action continue.
 
-(à voir ak Ja)
-Notre base peut grossir, effectivement, on cherche a devenir de plus en plus fort mais la map pourrais changer de niveau en niveau
-Le setting de la base restera pareil mais le background changerais
 
-(Ja)-Je crois que le meilleur serai de jouer avec des regions , sa serais parfait , des homme des caverne nomade 
+Notre base peut grossir, effectivement, on cherche a devenir de plus en plus fort mais la map pourrais changer de niveau en niveau
+
+Regions 
+1) La grotte et son alentour
+2) Le desert des milles danger 
+3) Le mont enneige (Everest style)
+
 Premier niveau Serait une grotte a defendre et a fortifier mais plus le jeu avance plus de region il pourais explorer (travel de caravanne ,du genre tout serait modifiable 
 jexplique , les batiment et mur , defence et autre ,
 serais placer dans un espace (Caravanne de voyage) et peut etre tous deployer dans le nouvelle endoit)
