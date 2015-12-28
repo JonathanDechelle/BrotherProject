@@ -6,14 +6,14 @@ public class CameraBehaviour : MonoBehaviour
     public LevelData m_LevelData;
     private Vector3 m_InitialPosition;
 
-    private float m_WaitTimeSetup = 1.5f;
-    private float m_WaitTimeReverse = 4.0f;
+    private float m_WaitTimeOnAllyBase = 1.5f;
+    private float m_WaitTimeOnEnemyBase = 4.0f;
     private float m_WaitTimeCouter = 0f;
     private float m_CameraSpeed = 1.5f;
     private const float MINIMUM_DISTANCE_TO_RETURN = 32.5f;
     private const float OFFSET_INTRO_CAMERA = 12f;
-    private bool m_ReverseToBase = false;
-    private bool m_CameraIntroTraveling = true;
+    private bool m_ReturnToBase = false;
+    private bool m_CameraIntroSequence = true;
 
     public void Start()
     {
@@ -25,20 +25,20 @@ public class CameraBehaviour : MonoBehaviour
     public IEnumerator UpdateCameraIntroTravelling()
     {
         // Time stay focus on ally base
-        m_WaitTimeCouter = m_WaitTimeSetup;
+        m_WaitTimeCouter = m_WaitTimeOnAllyBase;
         while (m_WaitTimeCouter > 0)
         {
             m_WaitTimeCouter -= Time.deltaTime;
             yield return null;
         }
-        m_WaitTimeCouter = m_WaitTimeReverse;
+        m_WaitTimeCouter = m_WaitTimeOnEnemyBase;
 
         //Camera traveling sequence (ally base -> enemyBase -> ally base)
-        while (m_CameraIntroTraveling)
+        while (m_CameraIntroSequence)
         {
             yield return null;
 
-            Vector3 direction = m_ReverseToBase ?
+            Vector3 direction = m_ReturnToBase ?
                  m_InitialPosition - transform.position :                                  //Enemy -> Ally
                  m_LevelData.m_EnemySpawnPoint.transform.position - transform.position;    //Ally -> Enemy
 
@@ -58,7 +58,7 @@ public class CameraBehaviour : MonoBehaviour
                 }
                 else
                 {
-                    m_ReverseToBase = true;
+                    m_ReturnToBase = true;
                 }
             }
         }
