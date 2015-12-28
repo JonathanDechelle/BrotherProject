@@ -13,6 +13,8 @@ public class LevelData : MonoBehaviour
 {
     public string m_LevelName = "Mission 1 : The test";
     public ELevelDifficulty m_DifficultyLevel = ELevelDifficulty.Easy;
+    public EnemyGoal m_EnemyGoal;
+    public EnemySpawnPoint m_EnemySpawnPoint;
     public List<WaveInfo> m_WavesInfo;
 
     private const string LEVEL_FORMAT = "Mission Name = {0} Difficulty {1}";
