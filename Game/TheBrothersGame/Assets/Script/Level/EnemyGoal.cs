@@ -14,9 +14,19 @@ public class EnemyGoal : MonoBehaviour
     {
         List<Enemy> ennemies = CombatEnemyUtil.GetEnnemiesAround(transform.position, m_RangeCheckHazard);
         float newHasardLevel = ennemies.Count;
-        
+       
+        foreach(Enemy e in ennemies)
+        {
+            if (!e.HasAttackMode())
+            {
+                --newHasardLevel;
+            }
+        }
         m_CurrentHazardLevel = -newHasardLevel + m_BaseHazardLevel;
     }
 
-  
+    public bool IsTooWeak()
+    {
+        return m_CurrentHazardLevel < 1;
+    }
 }
