@@ -16,20 +16,4 @@ public class LevelData : MonoBehaviour
     public EnemyGoal m_EnemyGoal;
     public EnemySpawnPoint m_EnemySpawnPoint;
     public List<WaveInfo> m_WavesInfo;
-
-    private const string LEVEL_FORMAT = "Mission Name = {0} Difficulty {1}";
-    public void Start()
-    {
-        DebugLevel();
-    }
-
-    private void DebugLevel()
-    {
-        ShowNameAndDifficulty();
-    }
-
-    private void ShowNameAndDifficulty()
-    {
-        Debug.Log(string.Format(LEVEL_FORMAT, m_LevelName, m_DifficultyLevel));
-    }
 }
