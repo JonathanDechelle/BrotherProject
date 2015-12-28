@@ -16,9 +16,9 @@ class Starter : MonoBehaviour
 
     public void Update()
     {
-        foreach (IEnumerator routine in CoroutineManager.Coroutines)
+        for (int i = 0; i < CoroutineManager.Coroutines.Count; i++)
         {
-            routine.MoveNext();
+            CoroutineManager.Coroutines[i].MoveNext();
         }
     }
 }
