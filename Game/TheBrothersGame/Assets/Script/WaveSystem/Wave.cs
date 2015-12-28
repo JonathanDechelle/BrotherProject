@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public enum EWaveState
 {
@@ -9,25 +10,35 @@ public enum EWaveState
     Completed = 3
 }
 
-public class Wave : MonoBehaviour 
+[System.Serializable]
+public class WaveInfo
 {
-    public float m_CoolDownBeforeAttack = 2f;
+    public float m_WaitTime = 2f;
+    public EEnemy m_EnemyType;
+    public int m_NumberOfEnemy;
+}
+
+public class Wave : MonoBehaviour
+{
+    private WaveInfo m_WaveInfo;
     private EWaveState m_WaveState;
     private EWaveState m_DebugWaveState = EWaveState.Completed;
-    private int m_IDWave;
-    private Enemy m_Enemy;
+    private const string WAVE_FORMAT = "Wave State = {0}";
+    private List<Enemy> m_Enemies;
 
-    private const string WAVE_FORMAT = "Wave {0} State = {1}";
+    private EnemySpawnPoint m_SpawnPoint;
+    private EnemyGoal m_Goal;
 
-    public Wave(float aCoolDownBeforeAttack, int aIDWave)
+    public Wave(WaveInfo aWaveInfo, EnemyGoal aGoal, EnemySpawnPoint aSpawnPoint)
     {
-        m_CoolDownBeforeAttack = aCoolDownBeforeAttack;
+        m_WaveInfo = aWaveInfo;
         m_WaveState = EWaveState.Created;
-        m_IDWave = aIDWave;
+        m_Goal = aGoal;
+        m_SpawnPoint = aSpawnPoint;
         CoroutineManager.StartCoroutine(UpdateWave());
         CoroutineManager.StartCoroutine(UpdateDebugWave());
     }
-
+    
     public void StartCoolDown()
     {
         m_WaveState = EWaveState.WaitingToLaunch;
@@ -36,24 +47,36 @@ public class Wave : MonoBehaviour
     public void StartCombat()
     {
         m_WaveState = EWaveState.InProgress;
-        GameObject enemyGo = Instantiate(Resources.Load("Prefab/Enemy")) as GameObject;
-        m_Enemy = enemyGo.GetComponent<Enemy>();
+        m_Enemies = new List<Enemy>();
+        m_SpawnPoint.GenerateEnemies(m_WaveInfo);
+        m_SpawnPoint.m_EnemyGOReady += OnEnemyGoReady;
+    }
+
+    private void OnEnemyGoReady(GameObject aEnemyGo)
+    {
+        Enemy newEnemy = aEnemyGo.GetComponent<Enemy>();
+        List<Enemy> newEnnemis = new List<Enemy>();
+        if (newEnemy != null)
+        {
+            newEnemy.m_Target = m_Goal.transform.position;
+            m_Enemies.Add(newEnemy);
+        }
     }
 
     public bool LaunchAnotherWave()
     {
         return m_WaveState == EWaveState.InProgress || m_WaveState == EWaveState.Completed;
     }
-
+    
     private void DebugWave()
     {
         if(m_DebugWaveState != m_WaveState)
         {
             m_DebugWaveState = m_WaveState;
-            Debug.Log(string.Format(WAVE_FORMAT, m_IDWave, m_WaveState));
+            Debug.Log(string.Format(WAVE_FORMAT, m_WaveState));
         }
     }
-
+    
     private IEnumerator UpdateDebugWave()
     {
         while (true)
@@ -73,7 +96,7 @@ public class Wave : MonoBehaviour
         //Wait time before lunch
         while(m_WaveState == EWaveState.WaitingToLaunch)
         {
-            float timer = m_CoolDownBeforeAttack;
+            float timer = m_WaveInfo.m_WaitTime;
             while(timer > 0)
             {
                 timer -= Time.deltaTime;
@@ -83,14 +106,35 @@ public class Wave : MonoBehaviour
             StartCombat();
         }
 
-        while(m_WaveState == EWaveState.InProgress)
+        //Update wave during timeLife
+        while (m_WaveState == EWaveState.InProgress)
         {
             yield return null;
-            if (!m_Enemy.Alive) //Victory Condition
+
+            UpdateDeadEnnemies();
+
+            if (m_Enemies.Count == 0 && m_SpawnPoint.m_FinishToSpawn)
             {
-                Destroy(m_Enemy.gameObject);
                 m_WaveState = EWaveState.Completed;
                 CoroutineManager.StopCoroutine(UpdateDebugWave());
+				m_SpawnPoint.m_EnemyGOReady -= OnEnemyGoReady;
+            }
+        }
+    }
+	
+	private void OnDestroy()
+	{
+		m_SpawnPoint.m_EnemyGOReady -= OnEnemyGoReady;
+	}
+
+    private void UpdateDeadEnnemies()
+    {
+        for (int i = 0; i < m_Enemies.Count; i++)
+        {
+            if (m_Enemies[i].IsDead)
+            {
+                Destroy(m_Enemies[i].gameObject);
+                m_Enemies.RemoveAt(i);
             }
         }
     }

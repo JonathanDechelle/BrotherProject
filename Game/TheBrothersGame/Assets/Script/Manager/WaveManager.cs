@@ -18,7 +18,16 @@ public static class WaveManager
     {
         m_State = EWaveManagerState.InProcess;
         CoroutineManager.StartCoroutine(UpdateWaveManager());
-        m_WavesToProcess = aLevelData.m_Waves;
+        GenerateWave(aLevelData);
+    }
+
+    private static void GenerateWave(LevelData aLevelData)
+    {
+        foreach (WaveInfo waveinfo in aLevelData.m_WavesInfo)
+        {
+            Wave newWave = new Wave(waveinfo, aLevelData.m_EnemyGoal, aLevelData.m_EnemySpawnPoint);
+            m_WavesToProcess.Add(newWave);
+        }
     }
 
     private static IEnumerator UpdateWaveManager()

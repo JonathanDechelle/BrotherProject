@@ -5,16 +5,18 @@ class Starter : MonoBehaviour
 {
     public LevelData m_LevelData = null;
 
+    private EnemyGenerator m_EnemyGenerator;
     public void Start()
     {
+        m_EnemyGenerator = new EnemyGenerator();
         WaveManager.InitManager(m_LevelData);
     }
 
     public void Update()
     {
-        foreach (IEnumerator routine in CoroutineManager.Coroutines)
+        for (int i = 0; i < CoroutineManager.Coroutines.Count; i++)
         {
-            routine.MoveNext();
+            CoroutineManager.Coroutines[i].MoveNext();
         }
     }
 }
