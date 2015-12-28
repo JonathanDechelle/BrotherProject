@@ -58,31 +58,9 @@ public class Wave : MonoBehaviour
         List<Enemy> newEnnemis = new List<Enemy>();
         if (newEnemy != null)
         {
-            newEnemy.m_Target = GetClosestGoal(newEnemy).transform.position;
+            newEnemy.m_Goals = m_Goals;
             m_Enemies.Add(newEnemy);
         }
-    }
-
-    private EnemyGoal GetClosestGoal(Enemy aCurrentEnemy)
-    {
-        if (m_Goals.Count == 0)
-        {
-            return null;
-        }
-
-        float distanceMinimum = float.MaxValue;
-        int indexClosest = 0;
-        for (int i = 0; i < m_Goals.Count; i++)
-        {
-            float distance = Vector3.Distance(aCurrentEnemy.transform.position, m_Goals[i].transform.position);
-            if (distance < distanceMinimum)
-            {
-                distanceMinimum = distance;
-                indexClosest = i;
-            }
-        }
-
-        return m_Goals[indexClosest];
     }
 
     public bool LaunchAnotherWave()
