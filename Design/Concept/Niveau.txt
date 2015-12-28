@@ -9,4 +9,12 @@ donc cela veut dire qu'il ny a pas besoin d'avoir de focus de la caméra pour que
 Notre base peut grossir, effectivement, on cherche a devenir de plus en plus fort mais la map pourrais changer de niveau en niveau
 Le setting de la base restera pareil mais le background changerais
 
+(Ja)-Je crois que le meilleur serai de jouer avec des regions , sa serais parfait , des homme des caverne nomade 
+Premier niveau Serait une grotte a defendre et a fortifier mais plus le jeu avance plus de region il pourais explorer (travel de caravanne ,du genre tout serait modifiable 
+jexplique , les batiment et mur , defence et autre ,
+serais placer dans un espace (Caravanne de voyage) et peut etre tous deployer dans le nouvelle endoit)
+-Une bulle saffichera alors une alerte comme quoi que le joueur sapprete a partir dans une autre region et que tout les batiment seront tranferer dans la caravanne de voyage) 
+
+(le systeme damelioration de la base serais parfait une amelioration physique en plus de donner un aspect plus "Badass" damelioration en amelioration)
+
  
