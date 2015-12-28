@@ -27,7 +27,6 @@ public class Wave : MonoBehaviour
     private List<Enemy> m_Enemies;
 
     private EnemySpawnPoint m_SpawnPoint;
-    private float m_SpawnRange = 10f;
     private EnemyGoal m_Goal;
 
     public Wave(WaveInfo aWaveInfo, EnemyGoal aGoal, EnemySpawnPoint aSpawnPoint)
@@ -39,36 +38,6 @@ public class Wave : MonoBehaviour
         CoroutineManager.StartCoroutine(UpdateWave());
         CoroutineManager.StartCoroutine(UpdateDebugWave());
     }
-
-    private void GenerateEnemies()
-    {
-        m_Enemies = new List<Enemy>();
-        
-        for (int i = 0; i < m_WaveInfo.m_NumberOfEnemy; i++)
-        {
-            GameObject enemyGo = Instantiate(EnemyGenerator.GetEnemyGameObject(m_WaveInfo.m_EnemyType)) as GameObject;
-            enemyGo.transform.position = GetSpawnPosition(i);
-
-            Enemy newEnemy = enemyGo.GetComponent<Enemy>();
-            if (newEnemy != null)
-            {
-                newEnemy.m_Target = m_Goal.transform.position;
-                m_Enemies.Add(newEnemy);
-            }
-        }
-    }
-
-    public Vector3 GetSpawnPosition(int aUnitNumber)
-    {
-        float gap = 6.28319f / m_WaveInfo.m_NumberOfEnemy;
-        Vector3 newPosition = 
-                              new Vector3(
-                                            Mathf.Cos(gap * (aUnitNumber + 1)),
-                                            0,
-                                            Mathf.Sin(gap * (aUnitNumber + 1))) * m_SpawnRange;
-
-        return newPosition + m_SpawnPoint.transform.position;
-    }
     
     public void StartCoolDown()
     {
@@ -78,7 +47,20 @@ public class Wave : MonoBehaviour
     public void StartCombat()
     {
         m_WaveState = EWaveState.InProgress;
-        GenerateEnemies();
+        m_Enemies = new List<Enemy>();
+        m_SpawnPoint.GenerateEnemies(m_WaveInfo);
+        m_SpawnPoint.m_EnemyGOReady += OnEnemyGoReady;
+    }
+
+    private void OnEnemyGoReady(GameObject aEnemyGo)
+    {
+        Enemy newEnemy = aEnemyGo.GetComponent<Enemy>();
+        List<Enemy> newEnnemis = new List<Enemy>();
+        if (newEnemy != null)
+        {
+            newEnemy.m_Target = m_Goal.transform.position;
+            m_Enemies.Add(newEnemy);
+        }
     }
 
     public bool LaunchAnotherWave()
@@ -131,13 +113,19 @@ public class Wave : MonoBehaviour
 
             UpdateDeadEnnemies();
 
-            if (m_Enemies.Count == 0)
+            if (m_Enemies.Count == 0 && m_SpawnPoint.m_FinishToSpawn)
             {
                 m_WaveState = EWaveState.Completed;
                 CoroutineManager.StopCoroutine(UpdateDebugWave());
+				m_SpawnPoint.m_EnemyGOReady -= OnEnemyGoReady;
             }
         }
     }
+	
+	private void OnDestroy()
+	{
+		m_SpawnPoint.m_EnemyGOReady -= OnEnemyGoReady;
+	}
 
     private void UpdateDeadEnnemies()
     {
