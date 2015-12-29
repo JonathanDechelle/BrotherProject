@@ -14,6 +14,9 @@ public class Enemy : Character
     public List<EnemyGoal> m_Goals;
     private EState m_CurrentState = EState.Move;
     private float m_AttackRange = 20f;
+    private float m_SearchWaitingTime = 2f;
+    private float m_SearchCounter = 0f;
+    private EnemyGoal m_LastGoal;
 
     public override void Update()
     {
@@ -23,14 +26,31 @@ public class Enemy : Character
                 GotoTarget();
                 break;
             case EState.Attack:
-                m_RigidBody.velocity = Vector3.zero;
-                m_RigidBody.angularVelocity = Vector3.zero;
+                StopAllMovement();
                 break;
             case EState.Search:
+                transform.Rotate(Vector3.up * 10); //Just for debug
+                SearchAnimation();
                 break;
         }
 
         base.Update();
+    }
+
+    private void StopAllMovement()
+    {
+        m_RigidBody.velocity = Vector3.zero;
+        m_RigidBody.angularVelocity = Vector3.zero;
+    }
+
+    private void SearchAnimation()
+    {
+        m_SearchCounter += Time.deltaTime;
+        if (m_SearchCounter > m_SearchWaitingTime)
+        {
+            m_SearchCounter = 0;
+            m_CurrentState = EState.Move;
+        }
     }
 
     public bool HasAttackMode()
@@ -53,6 +73,14 @@ public class Enemy : Character
         {
             m_RigidBody.AddForce(direction * m_Speed, ForceMode.Acceleration);
         }
+
+        if (m_LastGoal != null && m_LastGoal != m_CurrentGoal)
+        {
+            StopAllMovement();
+            m_CurrentState = EState.Search;
+        }
+
+        m_LastGoal = m_CurrentGoal;
     }
 
     private EnemyGoal GetClosestGoal()
