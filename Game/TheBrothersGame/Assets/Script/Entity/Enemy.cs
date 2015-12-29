@@ -81,4 +81,9 @@ public class Enemy : Character
 
         return m_Goals[indexClosest];
     }
+
+    public void BeginDeadSequence()
+    {
+        Destroy(gameObject);
+    }
 }

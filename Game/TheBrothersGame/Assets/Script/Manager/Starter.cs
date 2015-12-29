@@ -5,10 +5,9 @@ class Starter : MonoBehaviour
 {
     public LevelData m_LevelData = null;
 
-    private EnemyGenerator m_EnemyGenerator;
     public void Start()
     {
-        m_EnemyGenerator = new EnemyGenerator();
+        gameObject.AddComponent<EnemyGenerator>();
         WaveManager.InitManager(m_LevelData);
     }
 

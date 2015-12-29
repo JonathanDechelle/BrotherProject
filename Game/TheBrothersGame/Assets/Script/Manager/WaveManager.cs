@@ -11,12 +11,10 @@ public enum EWaveManagerState
 
 public static class WaveManager
 {
-    private static EWaveManagerState m_State = EWaveManagerState.InProcess;
     private static List<Wave> m_WavesToProcess = new List<Wave>();
 
     public static void InitManager(LevelData aLevelData)
     {
-        m_State = EWaveManagerState.InProcess;
         CoroutineManager.StartCoroutine(UpdateWaveManager());
         GenerateWave(aLevelData);
     }
@@ -42,8 +40,6 @@ public static class WaveManager
 
             m_WavesToProcess.RemoveAt(0);
         }
-
-        m_State = EWaveManagerState.Finish;
     }
 
     private static Wave GetCurrentWaveToProcess()

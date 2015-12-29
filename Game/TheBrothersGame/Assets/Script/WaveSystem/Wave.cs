@@ -18,7 +18,7 @@ public class WaveInfo
     public int m_NumberOfEnemy;
 }
 
-public class Wave : MonoBehaviour
+public class Wave
 {
     private WaveInfo m_WaveInfo;
     private EWaveState m_WaveState;
@@ -55,7 +55,6 @@ public class Wave : MonoBehaviour
     private void OnEnemyGoReady(GameObject aEnemyGo)
     {
         Enemy newEnemy = aEnemyGo.GetComponent<Enemy>();
-        List<Enemy> newEnnemis = new List<Enemy>();
         if (newEnemy != null)
         {
             newEnemy.m_Goals = m_Goals;
@@ -133,7 +132,7 @@ public class Wave : MonoBehaviour
         {
             if (m_Enemies[i].IsDead)
             {
-                Destroy(m_Enemies[i].gameObject);
+                m_Enemies[i].BeginDeadSequence();
                 m_Enemies.RemoveAt(i);
             }
         }

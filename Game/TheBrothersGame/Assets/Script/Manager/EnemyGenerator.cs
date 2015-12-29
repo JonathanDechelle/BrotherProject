@@ -4,7 +4,7 @@ public class EnemyGenerator : MonoBehaviour
 {
     public static FakeEnemyMapper m_FakeEnemyMapper;
 
-    public EnemyGenerator()
+    public void Awake()
     {
         InitializeEnemyList();
     }
