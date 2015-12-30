@@ -11,12 +11,20 @@ public class Enemy : Character
     }
 
     public EnemyGoal m_CurrentGoal;
+
+    [HideInInspector]
     public List<EnemyGoal> m_Goals;
     private EState m_CurrentState = EState.Move;
     private float m_AttackRange = 20f;
     private float m_SearchWaitingTime = 2f;
     private float m_SearchCounter = 0f;
     private EnemyGoal m_LastGoal;
+    private NavMeshAgent m_NavMeshAgent;
+
+    private void Start()
+    {
+        m_NavMeshAgent = GetComponent<NavMeshAgent>();
+    }
 
     public override void Update()
     {
@@ -71,7 +79,7 @@ public class Enemy : Character
         }
         else
         {
-            m_RigidBody.AddForce(direction * m_Speed, ForceMode.Acceleration);
+            m_NavMeshAgent.destination = m_CurrentGoal.transform.position;
         }
 
         if (m_LastGoal != null && m_LastGoal != m_CurrentGoal)
