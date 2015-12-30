@@ -15,7 +15,7 @@ public class Enemy : Character
     [HideInInspector]
     public List<EnemyGoal> m_Goals;
     private EState m_CurrentState = EState.Move;
-    private float m_AttackRange = 20f;
+    private float m_AttackRange = 10f;
     private float m_SearchWaitingTime = 2f;
     private float m_SearchCounter = 0f;
     private EnemyGoal m_LastGoal;
