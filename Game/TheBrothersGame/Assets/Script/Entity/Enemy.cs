@@ -47,8 +47,7 @@ public class Enemy : Character
 
     private void StopAllMovement()
     {
-        m_RigidBody.velocity = Vector3.zero;
-        m_RigidBody.angularVelocity = Vector3.zero;
+        m_NavMeshAgent.destination = transform.position;
     }
 
     private void SearchAnimation()
