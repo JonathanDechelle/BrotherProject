@@ -11,14 +11,12 @@ public class CameraBehaviour : MonoBehaviour
     private float m_WaitTimeCouter = 0f;
     private float m_CameraSpeed = 1.5f;
     private const float MINIMUM_DISTANCE_TO_RETURN = 43f;
-    private const float OFFSET_INTRO_CAMERA = 12f;
     private bool m_ReturnToBase = false;
     private bool m_CameraIntroSequence = true;
 
     public void Start()
     {
         m_InitialPosition = m_LevelData.m_EnemyGoals[0].transform.position;
-        m_InitialPosition.z += OFFSET_INTRO_CAMERA;
         CoroutineManager.StartCoroutine(UpdateCameraIntroTravelling());
     }
 
@@ -56,11 +54,40 @@ public class CameraBehaviour : MonoBehaviour
                 {
                     m_WaitTimeCouter -= Time.deltaTime;
                 }
-                else
+                else 
                 {
-                    m_ReturnToBase = true;
+                    if (!m_ReturnToBase)
+                    {
+                        m_ReturnToBase = true;
+                    }
+                    else
+                    {
+                        m_CameraIntroSequence = false;
+                    }
                 }
             }
+        }
+
+        CoroutineManager.StartCoroutine(UpdateCameraInGame());   
+    }
+
+    private IEnumerator UpdateCameraInGame()
+    {
+        while (true)
+        {
+            yield return null;
+
+            Vector3 newPosition = transform.position;
+            if (Input.GetKey(KeyCode.A))
+            {
+                newPosition += Vector3.back * m_CameraSpeed;
+            }
+            else if (Input.GetKey(KeyCode.D))
+            {
+                newPosition += Vector3.forward * m_CameraSpeed;
+            }
+
+            transform.position = newPosition;
         }
     }
 }
