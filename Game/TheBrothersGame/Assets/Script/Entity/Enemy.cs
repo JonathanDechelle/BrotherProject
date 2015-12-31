@@ -88,7 +88,7 @@ public class Enemy : Character
     {
         m_CurrentGoal = GetClosestGoal();
 
-        float distance = GetDistanceWith(m_CurrentGoal.transform.position);
+        float distance = CombatEnemyUtil.GetDistanceBetween(m_CurrentGoal.transform.position, transform.position);
         if (distance < m_AttackRange)
         {
             m_CurrentState = EState.Attack;
@@ -104,13 +104,6 @@ public class Enemy : Character
         }
 
         m_LastGoal = m_CurrentGoal;
-    }
-
-    private float GetDistanceWith(Vector3 aPosition)
-    {
-        Vector3 direction = aPosition - transform.position;
-        direction.y = 0f;
-        return direction.magnitude;
     }
 
     private EnemyGoal GetClosestGoal()

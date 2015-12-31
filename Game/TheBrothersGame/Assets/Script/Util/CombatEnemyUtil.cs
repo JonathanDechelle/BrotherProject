@@ -25,4 +25,11 @@ public static class CombatEnemyUtil
     {
         return (Random.insideUnitSphere * aRadius) + aCenter;
     }
+
+    public static float GetDistanceBetween(Vector3 aTo, Vector3 aFrom)
+    {
+        Vector3 direction = aTo - aFrom;
+        direction.y = 0f;
+        return direction.magnitude;
+    }
 }
