@@ -21,6 +21,7 @@ public class Enemy : Character
     private float m_AttackCounterTime = 0f;
     private EnemyGoal m_LastGoal;
     private NavMeshAgent m_NavMeshAgent;
+    private float FIELD_OF_VIEW = 45f;
 
     private void Start()
     {
@@ -47,6 +48,17 @@ public class Enemy : Character
         base.Update();
     }
 
+    private void StopAllMovement()
+    {
+        m_NavMeshAgent.destination = transform.position;
+    }
+
+    private void OnEnterSearch()
+    {
+        StopAllMovement();
+        m_CurrentState = EState.Search;
+    }
+
     public void AttackGoal()
     {
         m_AttackCounterTime += Time.deltaTime;
@@ -57,14 +69,9 @@ public class Enemy : Character
 
             if (m_CurrentGoal.IsDestroy() || m_CurrentGoal == null)
             {
-                m_CurrentState = EState.Search;
+                OnEnterSearch();
             }
         }
-    }
-
-    private void StopAllMovement()
-    {
-        m_NavMeshAgent.destination = transform.position;
     }
 
     private void SearchAnimation()
@@ -80,10 +87,8 @@ public class Enemy : Character
     private void GotoTarget()
     {
         m_CurrentGoal = GetClosestGoal();
-        Vector3 direction = m_CurrentGoal.transform.position - transform.position;
-        direction.y = 0f;
 
-        float distance = direction.magnitude;
+        float distance = GetDistanceWith(m_CurrentGoal.transform.position);
         if (distance < m_AttackRange)
         {
             m_CurrentState = EState.Attack;
@@ -93,13 +98,19 @@ public class Enemy : Character
             m_NavMeshAgent.destination = m_CurrentGoal.transform.position;
         }
 
-        if (m_LastGoal != null && m_LastGoal != m_CurrentGoal)
+        if (m_LastGoal != null && m_LastGoal != m_CurrentGoal && distance > FIELD_OF_VIEW)
         {
-            StopAllMovement();
-            m_CurrentState = EState.Search;
+            OnEnterSearch();
         }
 
         m_LastGoal = m_CurrentGoal;
+    }
+
+    private float GetDistanceWith(Vector3 aPosition)
+    {
+        Vector3 direction = aPosition - transform.position;
+        direction.y = 0f;
+        return direction.magnitude;
     }
 
     private EnemyGoal GetClosestGoal()

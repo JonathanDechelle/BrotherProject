@@ -20,4 +20,9 @@ public static class CombatEnemyUtil
 
         return ennemies;
     }
+
+    public static Vector3 GetRandomPositionInCircleWithRadius(Vector3 aCenter, float aRadius)
+    {
+        return (Random.insideUnitSphere * aRadius) + aCenter;
+    }
 }
