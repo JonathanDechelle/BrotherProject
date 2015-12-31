@@ -14,10 +14,11 @@ public class Enemy : Character
 
     [HideInInspector]
     public List<EnemyGoal> m_Goals;
-    private EState m_CurrentState = EState.Move;
+    public EState m_CurrentState = EState.Move;
     private float m_AttackRange = 10f;
     private float m_SearchWaitingTime = 2f;
     private float m_SearchCounter = 0f;
+    private float m_AttackCounterTime = 0f;
     private EnemyGoal m_LastGoal;
     private NavMeshAgent m_NavMeshAgent;
 
@@ -35,6 +36,7 @@ public class Enemy : Character
                 break;
             case EState.Attack:
                 StopAllMovement();
+                AttackGoal();
                 break;
             case EState.Search:
                 transform.Rotate(Vector3.up * 10); //Just for debug
@@ -43,6 +45,21 @@ public class Enemy : Character
         }
 
         base.Update();
+    }
+
+    public void AttackGoal()
+    {
+        m_AttackCounterTime += Time.deltaTime;
+        if(m_AttackCounterTime >= m_AttackFrequency)
+        {
+            m_AttackCounterTime = 0;
+            m_CurrentGoal.m_Life -= m_AttackDamage;
+
+            if (m_CurrentGoal.IsDestroy() || m_CurrentGoal == null)
+            {
+                m_CurrentState = EState.Search;
+            }
+        }
     }
 
     private void StopAllMovement()
@@ -58,11 +75,6 @@ public class Enemy : Character
             m_SearchCounter = 0;
             m_CurrentState = EState.Move;
         }
-    }
-
-    public bool HasAttackMode()
-    {
-        return m_CurrentState == EState.Attack;
     }
 
     private void GotoTarget()
@@ -101,7 +113,7 @@ public class Enemy : Character
         int indexClosest = 0;
         for (int i = 0; i < m_Goals.Count; i++)
         {
-            if (m_Goals[i].IsTooWeak())
+            if (m_Goals[i] == null || m_Goals[i].IsDestroy() || m_Goals[i].IsTooWeak())
             {
                 continue;
             }
@@ -121,4 +133,14 @@ public class Enemy : Character
     {
         Destroy(gameObject);
     }
+
+    #region Get/Set 
+    public bool HasAttackMode
+    {
+        get
+        {
+            return m_CurrentState == EState.Attack;
+        }
+    }
+    #endregion
 }

@@ -17,12 +17,17 @@ public class EnemyGoal : MonoBehaviour
        
         foreach(Enemy e in ennemies)
         {
-            if (!e.HasAttackMode())
+            if (!e.HasAttackMode)
             {
                 --newHasardLevel;
             }
         }
         m_CurrentHazardLevel = -newHasardLevel + m_BaseHazardLevel;
+    }
+
+    public bool IsDestroy()
+    {
+        return m_Life < 0;
     }
 
     public bool IsTooWeak()
