@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -14,14 +14,20 @@ public enum EWaveState
 public class WaveInfo
 {
     public float m_WaitTime = 2f;
+    public List<MiniWave> m_MiniWaves;
+}
+
+[System.Serializable]
+public class MiniWave
+{
     public EEnemy m_EnemyType;
     public int m_NumberOfEnemy;
 }
 
 public class Wave
 {
+    public EWaveState m_WaveState;
     private WaveInfo m_WaveInfo;
-    private EWaveState m_WaveState;
     private EWaveState m_DebugWaveState = EWaveState.Completed;
     private const string WAVE_FORMAT = "Wave State = {0}";
     private List<Enemy> m_Enemies;

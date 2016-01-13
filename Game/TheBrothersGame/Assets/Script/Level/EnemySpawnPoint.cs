@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -21,21 +21,25 @@ public class EnemySpawnPoint : MonoBehaviour
 
     private IEnumerator SpawnEnemyWithFrequency()
     {
-        for (int i = 0; i < m_WaveInfo.m_NumberOfEnemy; i++)
+        for (int i = 0; i < m_WaveInfo.m_MiniWaves.Count; i++)
         {
-            GameObject enemyGo = Instantiate(EnemyGenerator.GetEnemyGameObject(m_WaveInfo.m_EnemyType)) as GameObject;
-            enemyGo.transform.position = GetSpawnPosition();
-
-            if (m_EnemyGOReady != null)
+            MiniWave currentMiniWave = m_WaveInfo.m_MiniWaves[i];
+            for (int j = 0; j < currentMiniWave.m_NumberOfEnemy; j++)
             {
-                m_EnemyGOReady(enemyGo);
-            }
+                GameObject enemyGo = Instantiate(EnemyGenerator.GetEnemyGameObject(currentMiniWave.m_EnemyType)) as GameObject;
+                enemyGo.transform.position = GetSpawnPosition();
 
-            float timer = m_SpawnFrequency;
-            while (timer > 0)
-            {
-                timer -= Time.deltaTime;
-                yield return null;
+                if (m_EnemyGOReady != null)
+                {
+                    m_EnemyGOReady(enemyGo);
+                }
+
+                float timer = m_SpawnFrequency;
+                while (timer > 0)
+                {
+                    timer -= Time.deltaTime;
+                    yield return null;
+                }
             }
         }
 
